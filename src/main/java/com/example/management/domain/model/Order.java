@@ -42,12 +42,6 @@ public class Order {
         validateCustomerId(customerId);
         validateItems(items);
         
-        Order order = new Order(customerId, items);
-        // Usar reflexión o crear un constructor package-private sería mejor,
-        // pero por ahora usaremos un enfoque diferente: crear una clase interna
-        // o modificar para permitir reconstrucción
-        
-        // Alternativa: crear un constructor package-private adicional
         return new Order(id, customerId, items, status, createdAt, updatedAt);
     }
     

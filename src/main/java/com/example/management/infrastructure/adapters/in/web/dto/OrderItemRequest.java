@@ -11,17 +11,14 @@ import java.math.BigDecimal;
 public class OrderItemRequest {
     
     @NotBlank(message = "El productId es obligatorio")
-    private String productId;
+    private final String productId;
     
     @NotNull(message = "La cantidad es obligatoria")
     @Positive(message = "La cantidad debe ser mayor a cero")
-    private Integer quantity;
+    private final Integer quantity;
     
     @NotNull(message = "El precio es obligatorio")
-    private BigDecimal price;
-    
-    public OrderItemRequest() {
-    }
+    private final BigDecimal price;
     
     public OrderItemRequest(String productId, Integer quantity, BigDecimal price) {
         this.productId = productId;
@@ -33,23 +30,11 @@ public class OrderItemRequest {
         return productId;
     }
     
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-    
     public Integer getQuantity() {
         return quantity;
     }
     
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-    
     public BigDecimal getPrice() {
         return price;
-    }
-    
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 }

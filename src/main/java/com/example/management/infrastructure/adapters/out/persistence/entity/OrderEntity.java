@@ -23,7 +23,7 @@ public class OrderEntity {
     @Column(nullable = false)
     private OrderStatusEntity status;
     
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItemEntity> items = new ArrayList<>();
     
     @Column(nullable = false)

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderTest {
 
     @Test
-    @DisplayName("Debería crear una Order válida")
+    @DisplayName("Should create a valid Order")
     void shouldCreateValidOrder() {
         // Given
         String customerId = "CUST-001";
@@ -39,7 +39,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería lanzar excepción si customerId es null")
+    @DisplayName("Should throw exception if customerId is null")
     void shouldThrowExceptionWhenCustomerIdIsNull() {
         // Given
         String customerId = null;
@@ -52,7 +52,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería lanzar excepción si customerId está vacío")
+    @DisplayName("Should throw exception if customerId is empty")
     void shouldThrowExceptionWhenCustomerIdIsEmpty() {
         // Given
         String customerId = "";
@@ -65,7 +65,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería lanzar excepción si items es null")
+    @DisplayName("Should throw exception if items is null")
     void shouldThrowExceptionWhenItemsIsNull() {
         // Given
         String customerId = "CUST-001";
@@ -78,7 +78,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería lanzar excepción si items está vacío")
+    @DisplayName("Should throw exception if items is empty")
     void shouldThrowExceptionWhenItemsIsEmpty() {
         // Given
         String customerId = "CUST-001";
@@ -91,7 +91,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería calcular correctamente el total")
+    @DisplayName("Should calculate total correctly")
     void shouldCalculateTotalCorrectly() {
         // Given
         String customerId = "CUST-001";
@@ -111,7 +111,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería cambiar el estado a CONFIRMED")
+    @DisplayName("Should change status to CONFIRMED")
     void shouldChangeStatusToConfirmed() {
         // Given
         Order order = new Order("CUST-001", 
@@ -125,7 +125,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería cambiar el estado a CANCELLED")
+    @DisplayName("Should change status to CANCELLED")
     void shouldChangeStatusToCancelled() {
         // Given
         Order order = new Order("CUST-001", 
@@ -139,7 +139,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería cambiar el estado a SHIPPED")
+    @DisplayName("Should change status to SHIPPED")
     void shouldChangeStatusToShipped() {
         // Given
         Order order = new Order("CUST-001", 
@@ -154,7 +154,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("No debería permitir cambiar a SHIPPED sin estar CONFIRMED")
+    @DisplayName("Should not allow ship without confirmation")
     void shouldNotAllowShipWithoutConfirmation() {
         // Given
         Order order = new Order("CUST-001", 

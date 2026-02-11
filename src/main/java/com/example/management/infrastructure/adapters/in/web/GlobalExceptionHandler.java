@@ -2,6 +2,8 @@ package com.example.management.infrastructure.adapters.in.web;
 
 import com.example.management.domain.exception.InvalidOrderException;
 import com.example.management.domain.exception.InvalidOrderItemException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +18,8 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     
     @ExceptionHandler(InvalidOrderException.class)
     public ResponseEntity<Map<String, String>> handleInvalidOrderException(InvalidOrderException e) {
@@ -44,9 +48,10 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception e) {
+        logger.error("An unexpected internal server error occurred: {}", e.getMessage(), e);
         Map<String, String> error = new HashMap<>();
         error.put("error", "InternalServerError");
-        error.put("message", e.getMessage());
+        error.put("message", "An unexpected error occurred. Please try again later.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
