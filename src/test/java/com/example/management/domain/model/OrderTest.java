@@ -232,4 +232,112 @@ class OrderTest {
             order.addItem(null);
         });
     }
+
+    @Test
+    @DisplayName("No debería permitir confirmar una orden cancelada")
+    void shouldNotAllowConfirmCancelledOrder() {
+        // Given
+        Order order = new Order("CUST-001", 
+            List.of(new OrderItem("PROD-001", 1, new BigDecimal("10.00"))));
+        order.cancel();
+
+        // When & Then
+        assertThrows(InvalidOrderException.class, () -> {
+            order.confirm();
+        });
+    }
+
+    @Test
+    @DisplayName("No debería permitir confirmar una orden ya enviada")
+    void shouldNotAllowConfirmShippedOrder() {
+        // Given
+        Order order = new Order("CUST-001", 
+            List.of(new OrderItem("PROD-001", 1, new BigDecimal("10.00"))));
+        order.confirm();
+        order.ship();
+
+        // When & Then
+        assertThrows(InvalidOrderException.class, () -> {
+            order.confirm();
+        });
+    }
+
+    @Test
+    @DisplayName("No debería permitir agregar items a una orden cancelada")
+    void shouldNotAllowAddItemToCancelledOrder() {
+        // Given
+        Order order = new Order("CUST-001", 
+            List.of(new OrderItem("PROD-001", 1, new BigDecimal("10.00"))));
+        order.cancel();
+        OrderItem newItem = new OrderItem("PROD-002", 2, new BigDecimal("15.00"));
+
+        // When & Then
+        assertThrows(InvalidOrderException.class, () -> {
+            order.addItem(newItem);
+        });
+    }
+
+    @Test
+    @DisplayName("No debería permitir agregar items a una orden enviada")
+    void shouldNotAllowAddItemToShippedOrder() {
+        // Given
+        Order order = new Order("CUST-001", 
+            List.of(new OrderItem("PROD-001", 1, new BigDecimal("10.00"))));
+        order.confirm();
+        order.ship();
+        OrderItem newItem = new OrderItem("PROD-002", 2, new BigDecimal("15.00"));
+
+        // When & Then
+        assertThrows(InvalidOrderException.class, () -> {
+            order.addItem(newItem);
+        });
+    }
+
+    @Test
+    @DisplayName("Debería reconstruir una orden desde persistencia correctamente")
+    void shouldReconstructOrderFromPersistence() {
+        // Given
+        String id = "ORDER-123";
+        String customerId = "CUST-001";
+        List<OrderItem> items = List.of(
+            new OrderItem("PROD-001", 2, new BigDecimal("10.00")),
+            new OrderItem("PROD-002", 1, new BigDecimal("20.00"))
+        );
+        OrderStatus status = OrderStatus.CONFIRMED;
+        LocalDateTime createdAt = LocalDateTime.now().minusDays(1);
+        LocalDateTime updatedAt = LocalDateTime.now();
+
+        // When
+        Order reconstructedOrder = Order.reconstruct(id, customerId, items, status, createdAt, updatedAt);
+
+        // Then
+        assertNotNull(reconstructedOrder);
+        assertEquals(id, reconstructedOrder.getId());
+        assertEquals(customerId, reconstructedOrder.getCustomerId());
+        assertEquals(status, reconstructedOrder.getStatus());
+        assertEquals(createdAt, reconstructedOrder.getCreatedAt());
+        assertEquals(updatedAt, reconstructedOrder.getUpdatedAt());
+        assertEquals(2, reconstructedOrder.getItems().size());
+        assertEquals(new BigDecimal("40.00"), reconstructedOrder.getTotal());
+    }
+
+    @Test
+    @DisplayName("Debería lanzar excepción al reconstruir orden con id null o vacío")
+    void shouldThrowExceptionWhenReconstructingWithNullOrEmptyId() {
+        // Given
+        String customerId = "CUST-001";
+        List<OrderItem> items = List.of(new OrderItem("PROD-001", 1, new BigDecimal("10.00")));
+        OrderStatus status = OrderStatus.PENDING;
+        LocalDateTime createdAt = LocalDateTime.now();
+        LocalDateTime updatedAt = LocalDateTime.now();
+
+        // When & Then
+        assertThrows(InvalidOrderException.class, () -> {
+            Order.reconstruct(null, customerId, items, status, createdAt, updatedAt);
+        });
+
+        assertThrows(InvalidOrderException.class, () -> {
+            Order.reconstruct("", customerId, items, status, createdAt, updatedAt);
+        });
+    }
 }

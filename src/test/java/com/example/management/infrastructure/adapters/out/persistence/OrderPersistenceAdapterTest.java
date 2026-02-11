@@ -4,6 +4,7 @@ import com.example.management.domain.model.Order;
 import com.example.management.domain.model.OrderItem;
 import com.example.management.domain.model.OrderStatus;
 import com.example.management.infrastructure.adapters.out.persistence.entity.OrderEntity;
+import com.example.management.infrastructure.adapters.out.persistence.entity.OrderItemEntity;
 import com.example.management.infrastructure.adapters.out.persistence.entity.OrderStatusEntity;
 import com.example.management.infrastructure.adapters.out.persistence.repository.OrderJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,12 @@ class OrderPersistenceAdapterTest {
         testOrderEntity.setStatus(OrderStatusEntity.PENDING);
         testOrderEntity.setCreatedAt(LocalDateTime.now());
         testOrderEntity.setUpdatedAt(LocalDateTime.now());
+        
+        // Agregar items a la entidad para que la conversión a dominio funcione
+        OrderItemEntity itemEntity1 = new OrderItemEntity("product-1", 2, new BigDecimal("10.50"), testOrderEntity);
+        OrderItemEntity itemEntity2 = new OrderItemEntity("product-2", 1, new BigDecimal("5.00"), testOrderEntity);
+        testOrderEntity.getItems().add(itemEntity1);
+        testOrderEntity.getItems().add(itemEntity2);
     }
     
     @Test
