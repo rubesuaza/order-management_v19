@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,11 +70,26 @@ public class OrderEntity {
     }
     
     public List<OrderItemEntity> getItems() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
     
-    public void setItems(List<OrderItemEntity> items) {
-        this.items = items;
+    /**
+     * Adds an item to the order, maintaining the bidirectional relationship.
+     */
+    public void addItem(OrderItemEntity item) {
+        if (item != null) {
+            items.add(item);
+            item.setOrder(this);
+        }
+    }
+    
+    /**
+     * Removes an item from the order, maintaining the bidirectional relationship.
+     */
+    public void removeItem(OrderItemEntity item) {
+        if (item != null && items.remove(item)) {
+            item.setOrder(null);
+        }
     }
     
     public LocalDateTime getCreatedAt() {

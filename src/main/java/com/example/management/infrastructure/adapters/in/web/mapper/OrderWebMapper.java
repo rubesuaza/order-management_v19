@@ -45,7 +45,7 @@ public class OrderWebMapper {
                 order.getItems().stream()
                         .map(OrderWebMapper::toItemResponse)
                         .collect(Collectors.toList()),
-                order.getStatus(),
+                order.getStatus().name(),
                 order.getTotal(),
                 order.getCreatedAt(),
                 order.getUpdatedAt()

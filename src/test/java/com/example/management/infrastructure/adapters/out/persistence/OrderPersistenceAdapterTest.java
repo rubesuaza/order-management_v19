@@ -56,8 +56,8 @@ class OrderPersistenceAdapterTest {
         // Agregar items a la entidad para que la conversión a dominio funcione
         OrderItemEntity itemEntity1 = new OrderItemEntity("product-1", 2, new BigDecimal("10.50"), testOrderEntity);
         OrderItemEntity itemEntity2 = new OrderItemEntity("product-2", 1, new BigDecimal("5.00"), testOrderEntity);
-        testOrderEntity.getItems().add(itemEntity1);
-        testOrderEntity.getItems().add(itemEntity2);
+        testOrderEntity.addItem(itemEntity1);
+        testOrderEntity.addItem(itemEntity2);
     }
     
     @Test

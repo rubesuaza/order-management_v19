@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -146,8 +147,15 @@ class OrderControllerTest {
     @Test
     void testConfirmOrder() throws Exception {
         // Given
-        testOrder.confirm();
-        when(orderUseCase.confirmOrder(testOrder.getId())).thenReturn(testOrder);
+        Order confirmedOrder = Order.reconstruct(
+            testOrder.getId(),
+            testOrder.getCustomerId(),
+            testOrder.getItems(),
+            com.example.management.domain.model.OrderStatus.CONFIRMED,
+            testOrder.getCreatedAt(),
+            java.time.LocalDateTime.now()
+        );
+        when(orderUseCase.confirmOrder(testOrder.getId())).thenReturn(confirmedOrder);
         
         // When & Then
         mockMvc.perform(post("/api/orders/{orderId}/confirm", testOrder.getId()))
@@ -173,8 +181,15 @@ class OrderControllerTest {
     @Test
     void testCancelOrder() throws Exception {
         // Given
-        testOrder.cancel();
-        when(orderUseCase.cancelOrder(testOrder.getId())).thenReturn(testOrder);
+        Order cancelledOrder = Order.reconstruct(
+            testOrder.getId(),
+            testOrder.getCustomerId(),
+            testOrder.getItems(),
+            com.example.management.domain.model.OrderStatus.CANCELLED,
+            testOrder.getCreatedAt(),
+            java.time.LocalDateTime.now()
+        );
+        when(orderUseCase.cancelOrder(testOrder.getId())).thenReturn(cancelledOrder);
         
         // When & Then
         mockMvc.perform(post("/api/orders/{orderId}/cancel", testOrder.getId()))
@@ -187,9 +202,15 @@ class OrderControllerTest {
     @Test
     void testShipOrder() throws Exception {
         // Given
-        testOrder.confirm();
-        testOrder.ship();
-        when(orderUseCase.shipOrder(testOrder.getId())).thenReturn(testOrder);
+        Order shippedOrder = Order.reconstruct(
+            testOrder.getId(),
+            testOrder.getCustomerId(),
+            testOrder.getItems(),
+            com.example.management.domain.model.OrderStatus.SHIPPED,
+            testOrder.getCreatedAt(),
+            java.time.LocalDateTime.now()
+        );
+        when(orderUseCase.shipOrder(testOrder.getId())).thenReturn(shippedOrder);
         
         // When & Then
         mockMvc.perform(post("/api/orders/{orderId}/ship", testOrder.getId()))
@@ -204,9 +225,18 @@ class OrderControllerTest {
         // Given
         OrderItemRequest itemRequest = new OrderItemRequest("product-3", 1, new BigDecimal("15.00"));
         OrderItem newItem = new OrderItem("product-3", 1, new BigDecimal("15.00"));
-        testOrder.addItem(newItem);
+        List<OrderItem> itemsWithNewItem = new ArrayList<>(testOrder.getItems());
+        itemsWithNewItem.add(newItem);
+        Order orderWithNewItem = Order.reconstruct(
+            testOrder.getId(),
+            testOrder.getCustomerId(),
+            itemsWithNewItem,
+            testOrder.getStatus(),
+            testOrder.getCreatedAt(),
+            java.time.LocalDateTime.now()
+        );
         
-        when(orderUseCase.addItemToOrder(eq(testOrder.getId()), any())).thenReturn(testOrder);
+        when(orderUseCase.addItemToOrder(eq(testOrder.getId()), any())).thenReturn(orderWithNewItem);
         
         // When & Then
         mockMvc.perform(post("/api/orders/{orderId}/items", testOrder.getId())

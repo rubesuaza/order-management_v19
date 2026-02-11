@@ -1,6 +1,5 @@
 package com.example.management.infrastructure.adapters.in.web.dto;
 
-import com.example.management.domain.model.OrderStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +12,7 @@ public class OrderResponse {
     private String id;
     private String customerId;
     private List<OrderItemResponse> items;
-    private OrderStatus status;
+    private String status;
     private BigDecimal total;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -22,7 +21,7 @@ public class OrderResponse {
     }
     
     public OrderResponse(String id, String customerId, List<OrderItemResponse> items, 
-                        OrderStatus status, BigDecimal total, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                        String status, BigDecimal total, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.customerId = customerId;
         this.items = items;
@@ -56,11 +55,11 @@ public class OrderResponse {
         this.items = items;
     }
     
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
     
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     

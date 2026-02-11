@@ -218,7 +218,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("No debería permitir agregar item null")
+    @DisplayName("Should not allow adding null item")
     void shouldNotAllowAddNullItem() {
         // Given
         Order order = new Order("CUST-001", 
@@ -231,7 +231,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("No debería permitir confirmar una orden cancelada")
+    @DisplayName("Should not allow confirming a cancelled order")
     void shouldNotAllowConfirmCancelledOrder() {
         // Given
         Order order = new Order("CUST-001", 
@@ -245,7 +245,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("No debería permitir confirmar una orden ya enviada")
+    @DisplayName("Should not allow confirming a shipped order")
     void shouldNotAllowConfirmShippedOrder() {
         // Given
         Order order = new Order("CUST-001", 
@@ -260,7 +260,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("No debería permitir agregar items a una orden cancelada")
+    @DisplayName("Should not allow adding items to a cancelled order")
     void shouldNotAllowAddItemToCancelledOrder() {
         // Given
         Order order = new Order("CUST-001", 
@@ -275,7 +275,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("No debería permitir agregar items a una orden enviada")
+    @DisplayName("Should not allow adding items to a shipped order")
     void shouldNotAllowAddItemToShippedOrder() {
         // Given
         Order order = new Order("CUST-001", 
@@ -291,7 +291,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería reconstruir una orden desde persistencia correctamente")
+    @DisplayName("Should reconstruct an order from persistence correctly")
     void shouldReconstructOrderFromPersistence() {
         // Given
         String id = "ORDER-123";
@@ -319,7 +319,7 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Debería lanzar excepción al reconstruir orden con id null o vacío")
+    @DisplayName("Should throw exception when reconstructing order with null or empty id")
     void shouldThrowExceptionWhenReconstructingWithNullOrEmptyId() {
         // Given
         String customerId = "CUST-001";

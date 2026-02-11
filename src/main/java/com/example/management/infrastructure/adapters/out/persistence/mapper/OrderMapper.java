@@ -35,7 +35,7 @@ public class OrderMapper {
                     item.getPrice(),
                     entity
             );
-            entity.getItems().add(itemEntity);
+            entity.addItem(itemEntity);
         });
         
         return entity;
